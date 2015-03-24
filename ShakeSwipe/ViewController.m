@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, MOVT) {
 };
 
 
-static const CGFloat kTime = 1.5;
+static const CGFloat kTime = 4.5;
 
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
@@ -45,11 +45,11 @@ static const CGFloat kTime = 1.5;
 
                                                     double posValue = fabs(motion.userAcceleration.x);
 //                                                    NSLog(@"%f",motion.userAcceleration.x);
-                                                    if ( posValue > .25) {
-                                                        NSLog(@"%f",motion.userAcceleration.x);
+                                                    if ( posValue > .15) {
+//                                                        NSLog(@"%f",motion.userAcceleration.x);
                                                         if(!isMoving)
                                                         {
-                                                            isMoving = !isMoving;
+                                                            isMoving = YES;
                                                             [self moverWithOffset:motion.userAcceleration.x];
                                                         }
                                                     }
@@ -107,7 +107,7 @@ static const CGFloat kTime = 1.5;
 
 - (MOVT)directionFromGyroX:(double)value
 {
-    return value > 2.5 ; YES ; NO;
+    return value > 0 ; YES ; NO;
 }
 
 #pragma mark - Movement Handling 
@@ -131,6 +131,7 @@ static const CGFloat kTime = 1.5;
 #pragma mark - Animations
 - (void)animateLeftWithView:(UIView *)view
 {
+    NSLog(@"Move Left");
     CGPoint mainViewCenter = self.view.center;
     CGSize mainViewBounds = self.view.bounds.size;
     
@@ -153,6 +154,7 @@ static const CGFloat kTime = 1.5;
 
 - (void)animateRightWithView:(UIView *)view
 {
+    NSLog(@"Move RIght");
     CGPoint mainViewCenter = self.view.center;
     CGSize mainViewBounds = self.view.bounds.size;
     
@@ -186,6 +188,7 @@ static const CGFloat kTime = 1.5;
         make.centerY.equalTo(superview.mas_centerY);
 
     }];
+    NSLog(@"You can move now");
     isMoving = NO;
 }
 
