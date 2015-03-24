@@ -6,9 +6,20 @@
 //  Copyright (c) 2015 ROBERA GELETA. All rights reserved.
 //
 
+
+
+
 #import "ViewController.h"
 #import <CoreMotion/CoreMotion.h>
 #import <Masonry/Masonry.h>
+
+typedef NS_ENUM(NSUInteger, MOVT) {
+    LEFT,
+    RIGHT,
+};
+
+
+static const CGFloat kTime = 1.5;
 
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
@@ -20,7 +31,9 @@
 @end
 
 @implementation ViewController
-
+{
+    BOOL isMoving;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
@@ -34,9 +47,12 @@
 //                                                    NSLog(@"%f",motion.userAcceleration.x);
                                                     if ( posValue > .25) {
                                                         NSLog(@"%f",motion.userAcceleration.x);
-//                                                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                                                        if(!isMoving)
+                                                        {
+                                                            isMoving = !isMoving;
+                                                            [self moverWithOffset:motion.userAcceleration.x];
+                                                        }
                                                     }
-                                                    
         }];
     }
     
@@ -49,8 +65,6 @@
     
     [self.view addSubview:_firstView];
     [self.view addSubview:_secondView];
-    
-    NSArray *subviews = [self.view subviews];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -75,21 +89,108 @@
     return _motionManager;
 }
 
+
+#pragma mark - Main Mover
+- (void)moverWithOffset:(double)offset
+{
+    UIView *frontCard = [self topCard];
+    MOVT direction = [self directionFromGyroX:offset];
+    [self popCard:frontCard movement:direction];
+}
+
+
+#pragma mark - Helpers
+- (UIView *)topCard
+{
+    return  (UIView *)[self.view subviews].lastObject;
+}
+
+- (MOVT)directionFromGyroX:(double)value
+{
+    return value > 2.5 ; YES ; NO;
+}
+
+#pragma mark - Movement Handling 
+/**
+ *  Pop's the top card off screen and stacks it under neath the new top card
+ *
+ *  @param view - is the view to be poped off
+ */
+- (void)popCard:(UIView *)view movement:(MOVT)direction
+{
+    switch (direction) {
+        case LEFT:
+            [self animateLeftWithView:view];
+            break;
+        case RIGHT:
+            [self animateRightWithView:view];
+            break;
+    }
+}
+
+#pragma mark - Animations
 - (void)animateLeftWithView:(UIView *)view
 {
+    CGPoint mainViewCenter = self.view.center;
+    CGSize mainViewBounds = self.view.bounds.size;
     
+    CGPoint offscreenLeftCenter = CGPointMake(mainViewCenter.x - mainViewBounds.width, mainViewCenter.y);
+    [UIView animateWithDuration:kTime
+                          delay:0
+         usingSpringWithDamping:.4
+          initialSpringVelocity:6
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         CATransform3D t = CATransform3DIdentity;
+                         t = CATransform3DRotate(t, 45.0f * M_PI / 180.0f, 0, 0, 1);
+                         view.layer.transform = t;
+                         view.center = offscreenLeftCenter;
+                     }
+                     completion:^(BOOL finished) {
+                         [self setViewToCenter:view];
+                     }];
 }
 
 - (void)animateRightWithView:(UIView *)view
 {
+    CGPoint mainViewCenter = self.view.center;
+    CGSize mainViewBounds = self.view.bounds.size;
     
+    CGPoint offscreenLeftCenter = CGPointMake(mainViewCenter.x +  mainViewBounds.width, mainViewCenter.y);
+    [UIView animateWithDuration:kTime
+                          delay:0
+         usingSpringWithDamping:.4
+          initialSpringVelocity:6
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         CATransform3D t = CATransform3DIdentity;
+                         t = CATransform3DRotate(t, -45.0f * M_PI / 180.0f, 0, 0, 1);
+                         view.layer.transform = t;
+                         view.center = offscreenLeftCenter;
+                     }
+                     completion:^(BOOL finished) {
+                         [self setViewToCenter:view];
+                     }];
+
 }
 
 - (void)setViewToCenter:(UIView *)view
 {
-    view.center = self.view.center;
+    UIView *superview = self.view;
+    view.layer.transform = CATransform3DIdentity;
+    [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
+    [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.centerX.equalTo(superview.mas_centerX);
+        make.centerY.equalTo(superview.mas_centerY);
+
+    }];
+    isMoving = NO;
 }
 
+
+#pragma mark - First Layout
 - (void)initalLayout
 {
     UIView *superview = self.view;
