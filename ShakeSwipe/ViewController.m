@@ -19,8 +19,9 @@ typedef NS_ENUM(NSUInteger, MOVT) {
 };
 
 
-static const CGFloat kTime = 0.7;
-
+static const CGFloat kTime = 1.2;
+static const CGFloat kWitdh = 0.7;
+static const CGFloat kInitalSpringSpeed = 0;
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
 
@@ -45,12 +46,11 @@ static const CGFloat kTime = 0.7;
 
                                                     double posValue = fabs(motion.userAcceleration.x);
 //                                                    NSLog(@"%f",motion.userAcceleration.x);
-                                                    if ( posValue > .15) {
+                                                    if ( posValue > .25) {
 
                                                         if(!isMoving)
                                                         {
 //                                                            NSLog(@"%f",motion.userAcceleration.x);
-                                                             NSArray *subviews = self.view.subviews;
                                                             isMoving = YES;
                                                             [self moverWithOffset:motion.userAcceleration.x];
                                                         }
@@ -75,12 +75,9 @@ static const CGFloat kTime = 0.7;
 {
     [super viewDidAppear:animated];
     [self initalLayout];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
-//        });
-//    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self animateLeftWithView:_secondView];
+    });
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -122,7 +119,18 @@ static const CGFloat kTime = 0.7;
     return value > 0 ? LEFT : RIGHT;
 }
 
-#pragma mark - Movement Handling 
+- (UIView *)viewUnderNeathView:(UIView *)view
+{
+    if(view == _firstView)
+    {
+        return  _secondView;
+    }else
+    {
+        return _firstView;
+    }
+}
+
+#pragma mark - Movement Handling
 /**
  *  Pop's the top card off screen and stacks it under neath the new top card
  *
@@ -138,17 +146,37 @@ static const CGFloat kTime = 0.7;
             [self animateRightWithView:view];
             break;
     }
+
+    [self animateScaleUpWithView:[self viewUnderNeathView:view]];
 }
 
+
+
 #pragma mark - Animations
+
+- (void)animateScaleUpWithView:(UIView *)view
+{
+    view.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    [UIView animateWithDuration:kTime
+                          delay:.2
+         usingSpringWithDamping:.4
+          initialSpringVelocity:5
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         view.transform = CGAffineTransformIdentity;
+                     }
+                     completion:^(BOOL finished) {
+                         
+                     }];
+}
 - (void)animateLeftWithView:(UIView *)view
 {
     NSLog(@"Move Left");
     [self setViewToLeft:view];
     [UIView animateWithDuration:kTime
                           delay:0
-         usingSpringWithDamping:.4
-          initialSpringVelocity:6
+         usingSpringWithDamping:kWitdh
+          initialSpringVelocity:kInitalSpringSpeed
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          CATransform3D t = CATransform3DIdentity;
@@ -168,8 +196,8 @@ static const CGFloat kTime = 0.7;
     [self setViewToRight:view];
     [UIView animateWithDuration:kTime
                           delay:0
-         usingSpringWithDamping:.4
-          initialSpringVelocity:6
+         usingSpringWithDamping:kWitdh
+          initialSpringVelocity:kInitalSpringSpeed
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          CATransform3D t = CATransform3DIdentity;
@@ -193,8 +221,8 @@ static const CGFloat kTime = 0.7;
     view.layer.transform = CATransform3DIdentity;
     [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
         make.right.equalTo(superview.mas_left);
         make.centerY.equalTo(superview.mas_centerY);
     }];
@@ -206,8 +234,8 @@ static const CGFloat kTime = 0.7;
     view.layer.transform = CATransform3DIdentity;
     [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
         make.left.equalTo(superview.mas_right);
         make.centerY.equalTo(superview.mas_centerY);
     }];
@@ -225,8 +253,8 @@ static const CGFloat kTime = 0.7;
     [self.view insertSubview:topView belowSubview:self.view.subviews.lastObject];
 
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
         
@@ -240,15 +268,15 @@ static const CGFloat kTime = 0.7;
 {
     UIView *superview = self.view;
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
     }];
     
     [_secondView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
     }];
