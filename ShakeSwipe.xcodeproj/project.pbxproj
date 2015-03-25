@@ -16,6 +16,7 @@
 		A16E6FE61AC21FBA00B9BA30 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = A16E6FE41AC21FBA00B9BA30 /* LaunchScreen.xib */; };
 		A16E6FF21AC21FBA00B9BA30 /* ShakeSwipeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A16E6FF11AC21FBA00B9BA30 /* ShakeSwipeTests.m */; };
 		A16E6FFD1AC266A000B9BA30 /* AnimCheckViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A16E6FFC1AC266A000B9BA30 /* AnimCheckViewController.m */; };
+		A16E70001AC272BE00B9BA30 /* RGView.m in Sources */ = {isa = PBXBuildFile; fileRef = A16E6FFF1AC272BE00B9BA30 /* RGView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +46,8 @@
 		A16E6FF11AC21FBA00B9BA30 /* ShakeSwipeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShakeSwipeTests.m; sourceTree = "<group>"; };
 		A16E6FFB1AC266A000B9BA30 /* AnimCheckViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AnimCheckViewController.h; sourceTree = "<group>"; };
 		A16E6FFC1AC266A000B9BA30 /* AnimCheckViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AnimCheckViewController.m; sourceTree = "<group>"; };
+		A16E6FFE1AC272BE00B9BA30 /* RGView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGView.h; sourceTree = "<group>"; };
+		A16E6FFF1AC272BE00B9BA30 /* RGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RGView.m; sourceTree = "<group>"; };
 		BBEE43D23DF2C322490E1432 /* Pods-ShakeSwipe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShakeSwipe.release.xcconfig"; path = "Pods/Target Support Files/Pods-ShakeSwipe/Pods-ShakeSwipe.release.xcconfig"; sourceTree = "<group>"; };
 		C06E90632BED0E55787D4C2B /* Pods-ShakeSwipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ShakeSwipe.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ShakeSwipe/Pods-ShakeSwipe.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,6 +107,8 @@
 				A16E6FDA1AC21FBA00B9BA30 /* AppDelegate.m */,
 				A16E6FDC1AC21FBA00B9BA30 /* ViewController.h */,
 				A16E6FDD1AC21FBA00B9BA30 /* ViewController.m */,
+				A16E6FFE1AC272BE00B9BA30 /* RGView.h */,
+				A16E6FFF1AC272BE00B9BA30 /* RGView.m */,
 				A16E6FFB1AC266A000B9BA30 /* AnimCheckViewController.h */,
 				A16E6FFC1AC266A000B9BA30 /* AnimCheckViewController.m */,
 				A16E6FDF1AC21FBA00B9BA30 /* Main.storyboard */,
@@ -287,6 +292,7 @@
 				A16E6FDB1AC21FBA00B9BA30 /* AppDelegate.m in Sources */,
 				A16E6FFD1AC266A000B9BA30 /* AnimCheckViewController.m in Sources */,
 				A16E6FD81AC21FBA00B9BA30 /* main.m in Sources */,
+				A16E70001AC272BE00B9BA30 /* RGView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

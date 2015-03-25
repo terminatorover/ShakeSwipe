@@ -12,7 +12,7 @@
 #import "ViewController.h"
 #import <CoreMotion/CoreMotion.h>
 #import <Masonry/Masonry.h>
-
+#import "RGView.h"
 typedef NS_ENUM(NSUInteger, MOVT) {
     LEFT,
     RIGHT,
@@ -60,11 +60,11 @@ static const CGFloat kInitalSpringSpeed = 0;
     }
     
     //create the first and second view
-    _firstView = [[UIView alloc]initWithFrame:CGRectZero];
+    _firstView = [[RGView alloc]initWithFrame:CGRectZero];
     _firstView.backgroundColor = [UIColor colorWithRed:0.32 green:0.26 blue:0.35 alpha:1];
     _firstView.tag = 99;
     
-    _secondView = [[UIView alloc]initWithFrame:CGRectZero];
+    _secondView = [[RGView alloc]initWithFrame:CGRectZero];
     _secondView.backgroundColor = [UIColor colorWithRed:0.91 green:0.3 blue:0.24 alpha:1];
     _secondView.tag = 100;
     
@@ -162,6 +162,7 @@ static const CGFloat kInitalSpringSpeed = 0;
 - (void)animateScaleUpWithView:(UIView *)view
 {
     view.transform = CGAffineTransformMakeScale(0.5, 0.5);
+    view.alpha = .4;
     [UIView animateWithDuration:kTime
                           delay:.4
          usingSpringWithDamping:.4
@@ -169,6 +170,7 @@ static const CGFloat kInitalSpringSpeed = 0;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          view.transform = CGAffineTransformIdentity;
+                         view.alpha = 1;
                      }
                      completion:^(BOOL finished) {
                          
@@ -293,6 +295,7 @@ static const CGFloat kInitalSpringSpeed = 0;
 - (void)addSomeCircularBorders:(UIView *)view
 {
     view.layer.cornerRadius = 14;
+    view.layer.masksToBounds = YES;
 }
 
 
