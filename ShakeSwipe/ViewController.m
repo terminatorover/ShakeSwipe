@@ -50,7 +50,7 @@ static const CGFloat kTime = 0.7;
                                                         if(!isMoving)
                                                         {
 //                                                            NSLog(@"%f",motion.userAcceleration.x);
-                                                            
+                                                             NSArray *subviews = self.view.subviews;
                                                             isMoving = YES;
                                                             [self moverWithOffset:motion.userAcceleration.x];
                                                         }
@@ -219,32 +219,18 @@ static const CGFloat kTime = 0.7;
     UIView *superview = self.view;
     view.layer.transform = CATransform3DIdentity;
 
-
+    UIView *topView = view;
+    [view removeFromSuperview];
+    
+    [self.view insertSubview:topView belowSubview:self.view.subviews.lastObject];
 
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
         make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
-
+        
     }];
-
-    NSArray *subviews = self.view.subviews;
-    UIView *thirdView = subviews[3];
-    UIView *secondView = subviews[2];
-    NSLog(@"%d, %d",secondView.tag,thirdView.tag);
-    [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
-    
-    NSArray *newOrderSubviews = self.view.subviews;
-    UIView *newThirdView = newOrderSubviews[3];
-    UIView *newSecondView = newOrderSubviews[2];
-    NSLog(@"%d, %d",newSecondView.tag,newThirdView.tag);
-    
-    if((newThirdView == secondView) && (newSecondView == thirdView))
-    {
-        NSLog(@"SWAPED CORRECTLY");
-    }
-    
     isMoving = NO;
 }
 
