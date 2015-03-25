@@ -20,7 +20,8 @@ typedef NS_ENUM(NSUInteger, MOVT) {
 
 
 static const CGFloat kTime = 1.2;
-static const CGFloat kWitdh = 0.7;
+static const CGFloat kWitdh = 0.5;
+static const CGFloat kHeight = 0.4;
 static const CGFloat kInitalSpringSpeed = 0;
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
@@ -158,7 +159,7 @@ static const CGFloat kInitalSpringSpeed = 0;
 {
     view.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [UIView animateWithDuration:kTime
-                          delay:.2
+                          delay:.4
          usingSpringWithDamping:.4
           initialSpringVelocity:5
                         options:UIViewAnimationOptionCurveEaseInOut
@@ -175,7 +176,7 @@ static const CGFloat kInitalSpringSpeed = 0;
     [self setViewToLeft:view];
     [UIView animateWithDuration:kTime
                           delay:0
-         usingSpringWithDamping:kWitdh
+         usingSpringWithDamping:3
           initialSpringVelocity:kInitalSpringSpeed
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
@@ -196,7 +197,7 @@ static const CGFloat kInitalSpringSpeed = 0;
     [self setViewToRight:view];
     [UIView animateWithDuration:kTime
                           delay:0
-         usingSpringWithDamping:kWitdh
+         usingSpringWithDamping:3
           initialSpringVelocity:kInitalSpringSpeed
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
