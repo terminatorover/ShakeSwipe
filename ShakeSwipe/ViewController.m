@@ -20,8 +20,8 @@ typedef NS_ENUM(NSUInteger, MOVT) {
 
 
 static const CGFloat kTime = 1.2;
-static const CGFloat kWitdh = 0.5;
-static const CGFloat kHeight = 0.4;
+static const CGFloat kWitdh = 0.7;
+
 static const CGFloat kInitalSpringSpeed = 0;
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
@@ -67,6 +67,10 @@ static const CGFloat kInitalSpringSpeed = 0;
     _secondView = [[UIView alloc]initWithFrame:CGRectZero];
     _secondView.backgroundColor = [UIColor colorWithRed:0.91 green:0.3 blue:0.24 alpha:1];
     _secondView.tag = 100;
+    
+    //---->
+    [self addSomeCircularBorders:_secondView];
+    [self addSomeCircularBorders:_firstView];
     
     [self.view addSubview:_firstView];
     [self.view addSubview:_secondView];
@@ -223,7 +227,7 @@ static const CGFloat kInitalSpringSpeed = 0;
     [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
         make.right.equalTo(superview.mas_left);
         make.centerY.equalTo(superview.mas_centerY);
     }];
@@ -236,7 +240,7 @@ static const CGFloat kInitalSpringSpeed = 0;
     [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
         make.left.equalTo(superview.mas_right);
         make.centerY.equalTo(superview.mas_centerY);
     }];
@@ -255,7 +259,7 @@ static const CGFloat kInitalSpringSpeed = 0;
 
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
         
@@ -270,16 +274,26 @@ static const CGFloat kInitalSpringSpeed = 0;
     UIView *superview = self.view;
     [_firstView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
     }];
     
     [_secondView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
-        make.height.equalTo(superview.mas_height).with.multipliedBy(kWitdh);
+        make.height.equalTo(superview.mas_width).with.multipliedBy(kWitdh);
         make.centerX.equalTo(superview.mas_centerX);
         make.centerY.equalTo(superview.mas_centerY);
     }];
 }
+
+
+
+#pragma mark - Border Up
+- (void)addSomeCircularBorders:(UIView *)view
+{
+    view.layer.cornerRadius = 14;
+}
+
+
 @end
