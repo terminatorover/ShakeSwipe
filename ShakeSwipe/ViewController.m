@@ -19,7 +19,7 @@ typedef NS_ENUM(NSUInteger, MOVT) {
 };
 
 
-static const CGFloat kTime = 4.5;
+static const CGFloat kTime = 1.5;
 
 @interface ViewController ()
 @property (nonatomic) CMMotionManager *motionManager;
@@ -46,10 +46,10 @@ static const CGFloat kTime = 4.5;
                                                     double posValue = fabs(motion.userAcceleration.x);
 //                                                    NSLog(@"%f",motion.userAcceleration.x);
                                                     if ( posValue > .15) {
-//                                                        NSLog(@"%f",motion.userAcceleration.x);
+
                                                         if(!isMoving)
                                                         {
-                                                            isMoving = YES;
+                                                            NSLog(@"%f",motion.userAcceleration.x);                                                            isMoving = YES;
                                                             [self moverWithOffset:motion.userAcceleration.x];
                                                         }
                                                     }
@@ -131,11 +131,7 @@ static const CGFloat kTime = 4.5;
 #pragma mark - Animations
 - (void)animateLeftWithView:(UIView *)view
 {
-    NSLog(@"Move Left");
-    CGPoint mainViewCenter = self.view.center;
-    CGSize mainViewBounds = self.view.bounds.size;
-    
-    CGPoint offscreenLeftCenter = CGPointMake(mainViewCenter.x - mainViewBounds.width, mainViewCenter.y);
+    [self setViewToLeft:view];
     [UIView animateWithDuration:kTime
                           delay:0
          usingSpringWithDamping:.4
@@ -143,9 +139,9 @@ static const CGFloat kTime = 4.5;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          CATransform3D t = CATransform3DIdentity;
-                         t = CATransform3DRotate(t, 45.0f * M_PI / 180.0f, 0, 0, 1);
+                         t = CATransform3DRotate(t, 15.0f * M_PI / 180.0f, 0, 0, 1);
                          view.layer.transform = t;
-                         view.center = offscreenLeftCenter;
+                         [self.view layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
                          [self setViewToCenter:view];
@@ -155,10 +151,8 @@ static const CGFloat kTime = 4.5;
 - (void)animateRightWithView:(UIView *)view
 {
     NSLog(@"Move RIght");
-    CGPoint mainViewCenter = self.view.center;
-    CGSize mainViewBounds = self.view.bounds.size;
-    
-    CGPoint offscreenLeftCenter = CGPointMake(mainViewCenter.x +  mainViewBounds.width, mainViewCenter.y);
+
+    [self setViewToRight:view];
     [UIView animateWithDuration:kTime
                           delay:0
          usingSpringWithDamping:.4
@@ -166,9 +160,9 @@ static const CGFloat kTime = 4.5;
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
                          CATransform3D t = CATransform3DIdentity;
-                         t = CATransform3DRotate(t, -45.0f * M_PI / 180.0f, 0, 0, 1);
+                         t = CATransform3DRotate(t, -15.0f * M_PI / 180.0f, 0, 0, 1);
                          view.layer.transform = t;
-                         view.center = offscreenLeftCenter;
+                         [self.view layoutIfNeeded];
                      }
                      completion:^(BOOL finished) {
                          [self setViewToCenter:view];
@@ -176,10 +170,42 @@ static const CGFloat kTime = 4.5;
 
 }
 
+
+
+#pragma mark - New Set Of Constraints To Move views off screen
+
+- (void)setViewToLeft:(UIView *)view
+{
+    UIView *superview = self.view;
+    view.layer.transform = CATransform3DIdentity;
+    [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
+    [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.right.equalTo(superview.mas_left);
+        make.centerY.equalTo(superview.mas_centerY);
+    }];
+}
+
+- (void)setViewToRight:(UIView *)view
+{
+    UIView *superview = self.view;
+    view.layer.transform = CATransform3DIdentity;
+    [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
+    [view mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
+        make.height.equalTo(superview.mas_height).with.multipliedBy(.4);
+        make.left.equalTo(superview.mas_right);
+        make.centerY.equalTo(superview.mas_centerY);
+    }];
+}
+
+
 - (void)setViewToCenter:(UIView *)view
 {
     UIView *superview = self.view;
     view.layer.transform = CATransform3DIdentity;
+
     [self.view exchangeSubviewAtIndex:2 withSubviewAtIndex:3];
     [view mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superview.mas_width).with.multipliedBy(.4);
